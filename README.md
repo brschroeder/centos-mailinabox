@@ -1,4 +1,4 @@
-CENTOS-MAIL-IN-A-BOX
+CentOS-Mail-in-a-Box
 ======================
 
 This is an attempt to port the Mail-in-a-Box project from Ubuntu to Centos. The home page of the original Ubuntu project is [here](https://mailinabox.email) and the code on Github is [here](https://github.com/mail-in-a-box/mailinabox).
