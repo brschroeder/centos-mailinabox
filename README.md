@@ -12,6 +12,7 @@ The goals of this project are the same as the original project
 * Have automated, auditable, and [idempotent](https://sharknet.us/2014/02/01/automated-configuration-management-challenges-with-idempotency/) configuration.
 * **Not** make a totally unhackable, NSA-proof server.
 * **Not** make something customizable by power users.
+* Do it all on CentOS 7.
 
 The Box
 -------
