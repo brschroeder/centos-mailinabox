@@ -35,7 +35,7 @@ It also includes:
 
 For more information on how Mail-in-a-Box handles your privacy, see the [security details page](security.md).
 
-Eventually tags/releases/commits will be crytographicall signed.My PGP key can be found on most key servers but you can get it directly from the MIT PGP system [here](http://pgp.mit.edu/pks/lookup?op=get&search=0x3A5877D361D6D391), or the PGP Public Key Server [here](https://pgp.key-server.io/0x3A5877D361D6D391) or look them up directly using "brett dot schroeder at gmail dot com". The 
+Eventually tags/releases/commits will be crytographicall signed.My PGP key can be found on most key servers but you can get it directly from the MIT PGP system [here](http://pgp.mit.edu/pks/lookup?op=get&search=0x3A5877D361D6D391), or the PGP Public Key Server [here](https://pgp.key-server.io/0x3A5877D361D6D391) or look them up directly using "brett dot schroeder at gmail dot com". The key is self-signed but the fingerprint is
 
     $ gpg --fingerprint 61D6D391
       Key fingerprint = 4FA3 9DA3 636B 5902 175D  4419 3A58 77D3 61D6 D391
