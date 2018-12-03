@@ -1,9 +1,15 @@
-CENTOS - MAIL IN A BOX
+CENTOS-MAIL-IN-A-BOX
 ======================
 
 This is an attempt to port the Mail-in-a-Box project from Ubuntu to Centos. The home page of the original Ubuntu project is [here](https://mailinabox.email) and the code on Github is [here](https://github.com/mail-in-a-box/mailinabox).
 
-At this stage, I am not even sure if this is feasible or will be 10,000 hours of work......lets see how it goes.
+At this stage, I am not even sure if this is feasible or will be 10,000 hours of work......lets see how it goes. There are many choppy seas ahead in the Ubuntu to Centos journey, including 
+* different packaging of applications (apt vs yum) with likely different versions and features
+* different firewalls (ufw vs firewalld)
+* no Python 3 on CentOS 7
+* different operating system management/configuration methods (sysinit vs systemd)
+* unknown implicit assumptions about the build environment (both on Vagrant but vbox vs libvirt providers....*should* be transparent but.....)
+* etc, etc., etc,
 
 The goals of this project are the same as the original project
 
@@ -17,7 +23,7 @@ The goals of this project are the same as the original project
 The Box
 -------
 
-Mail-in-a-Box turns a fresh CentOS 7 64-bit machine into a working mail server by installing and configuring various components.
+CentOS-Mail-in-a-Box will one day turn a fresh CentOS 7 64-bit machine into a working mail server by installing and configuring various components.
 
 It is a one-click email appliance. There are no user-configurable setup options. It "just works".
 
