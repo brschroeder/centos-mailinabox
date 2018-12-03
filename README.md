@@ -35,7 +35,7 @@ It also includes:
 
 For more information on how Mail-in-a-Box handles your privacy, see the [security details page](security.md).
 
-My PGP keys can be found on most key servers but you can get them directly from the MIT PGP system [here](http://pgp.mit.edu/pks/lookup?op=get&search=0x3A5877D361D6D391) or look them up directly using "brett dot schroeder at gmail dot com" 
+My PGP key can be found on most key servers but you can get it directly from the MIT PGP system [here](http://pgp.mit.edu/pks/lookup?op=get&search=0x3A5877D361D6D391), or the PGP Public Key Server [here](https://pgp.key-server.io/0x3A5877D361D6D391) or look them up directly using "brett dot schroeder at gmail dot com". The 
 
     $ gpg --fingerprint 61D6D391
     pub   4096R/61D6D391 2012-04-02
