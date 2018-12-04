@@ -8,7 +8,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Check that we are running on CentOS 7
-if [ "`cat /etc/redhat-release | sed 's/\.[0-9]\.[0-9]\{4\}.*//' `" != "CentOS Linux release 7" ]; then
+if [ "$(sed 's/\.[0-9]\.[0-9]\{4\}.*//' /etc/redhat-release)" != "CentOS Linux release 7" ]; then
 	echo "Mail-in-a-Box only supports being installed on CentOS 7, sorry. You are running:"
 	echo
 	if [ -e /etc/redhat-release ]; then
@@ -32,8 +32,8 @@ fi
 TOTAL_PHYSICAL_MEM=$(head -n 1 /proc/meminfo | awk '{print $2}')
 if [ $TOTAL_PHYSICAL_MEM -lt 500000 ]; then
 if [ ! -d /vagrant ]; then
-	TOTAL_PHYSICAL_MEM=$(expr \( \( $TOTAL_PHYSICAL_MEM \* 1024 \) / 1000 \) / 1000)
-	echo "Your Mail-in-a-Box needs more memory (RAM) to function properly."
+	TOTAL_PHYSICAL_MEM=$(( TOTAL_PHYSICAL_MEM * 1024 / 1000 / 1000 ))
+    echo "Your Mail-in-a-Box needs more memory (RAM) to function properly."
 	echo "Please provision a machine with at least 512 MB, 1 GB recommended."
 	echo "This machine has $TOTAL_PHYSICAL_MEM MB memory."
 	exit
