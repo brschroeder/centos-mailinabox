@@ -1,8 +1,11 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
 
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.memory = 1024
+  end
+
   config.vm.hostname = "mailinabox.lan"
-  # config.vm.network "private_network", ip: "192.168.121.333", auto_config: false
 
   config.vm.synced_folder ".", "/vagrant",
     type: "nfs",
@@ -18,7 +21,6 @@ Vagrant.configure("2") do |config|
       type: :nfs,
       nfs_version: 4,
       nfs_udp: false
-      #linux_nfs_options: ['rw','no_subtree_check','no_root_squash']
     }
   end
 
@@ -27,8 +29,8 @@ Vagrant.configure("2") do |config|
     # not ask any questions during provisioning. We'll let the
     # machine figure out its own public IP.
     # gpg --quiet --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-    yum --quiet --assumeyes update
-    yum --quiet --assumeyes install vim
+    #yum --quiet --assumeyes update
+    #yum --quiet --assumeyes install vim
     #export NONINTERACTIVE=1
     #export PUBLIC_IP=auto
     #export PUBLIC_IPV6=auto
