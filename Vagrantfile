@@ -1,9 +1,19 @@
+# This VM is setup to use NFS mounts since during development we want to edit
+# files from the host and have changes appear in the VM immediately so we can
+# test. NOTE: NFS version 4 is used - very simple to setup on Fedora.
+# NEED A REFERENCE
+
+
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
 
   config.vm.provider :libvirt do |libvirt|
     libvirt.memory = 1024
   end
+
+  # use Vagrant's insecure private key, allows new boxes to be shared w/o having
+  # to share your own private key(s)
+  config.ssh.insert_key = false
 
   config.vm.hostname = "mailinabox.lan"
 
@@ -38,7 +48,7 @@ Vagrant.configure("2") do |config|
     #export SKIP_NETWORK_CHECKS=1
     # Start the setup script.
     cd /vagrant
-    #setup/start.sh
+    setup/preflight.sh
 SHELL
 
 
