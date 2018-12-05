@@ -1,5 +1,6 @@
 **Editor**
-add this to ~/.vimrc to get ShellCheck running in realtime
+
+Add this to ~/.vimrc to get ShellCheck running in realtime
 
     if empty(glob('~/.vim/autoload/plug.vim'))
       silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
