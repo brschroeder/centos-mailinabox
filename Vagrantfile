@@ -12,7 +12,8 @@ Vagrant.configure("2") do |config|
   end
 
   # use Vagrant's insecure private key, allows new boxes to be shared w/o having
-  # to share your own private key(s)
+  # to share your own private key(s). Vagrants are pre-installed but you also get
+  # them from https://github.com/hashicorp/vagrant/tree/master/keys
   config.ssh.insert_key = false
 
   config.vm.hostname = "mailinabox.lan"
