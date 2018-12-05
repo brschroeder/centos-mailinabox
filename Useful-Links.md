@@ -13,7 +13,10 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
     Plug 'w0rp/ale'
     call plug#end()
 
-**Git/GitHub**
+**Markdown**
+* [Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+**Git / GitHub**
 * [Visual/interactive cheatsheet](http://ndpsoftware.com/git-cheatsheet.html)
 * [GitHub guides](https://guides.github.com) 
 
