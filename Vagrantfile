@@ -3,7 +3,6 @@
 # test. NOTE: NFS version 4 is used - very simple to setup on Fedora.
 # NEED A REFERENCE
 
-
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
 
@@ -42,14 +41,14 @@ Vagrant.configure("2") do |config|
     # gpg --quiet --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
     #yum --quiet --assumeyes update
     #yum --quiet --assumeyes install vim
-    #export NONINTERACTIVE=1
-    #export PUBLIC_IP=auto
-    #export PUBLIC_IPV6=auto
-    #export PRIMARY_HOSTNAME=auto
+    export NONINTERACTIVE=1
+    export PUBLIC_IP=auto
+    export PUBLIC_IPV6=auto
+    export PRIMARY_HOSTNAME=auto
     #export SKIP_NETWORK_CHECKS=1
     # Start the setup script.
     cd /vagrant
-    setup/preflight.sh
+    # setup/start.sh
 SHELL
 
 
