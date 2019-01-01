@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   # them from https://github.com/hashicorp/vagrant/tree/master/keys
   config.ssh.insert_key = false
 
-  config.vm.hostname = "mailinabox.lan"
+  config.vm.hostname ="cmiab.lan"
 
   config.vm.synced_folder ".", "/vagrant",
     type: "nfs",
@@ -39,8 +39,6 @@ Vagrant.configure("2") do |config|
     # not ask any questions during provisioning. We'll let the
     # machine figure out its own public IP.
     # gpg --quiet --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-    #yum --quiet --assumeyes update
-    #yum --quiet --assumeyes install vim
     export NONINTERACTIVE=1
     export PUBLIC_IP=auto
     export PUBLIC_IPV6=auto
@@ -48,7 +46,7 @@ Vagrant.configure("2") do |config|
     #export SKIP_NETWORK_CHECKS=1
     # Start the setup script.
     cd /vagrant
-    # setup/start.sh
+    setup/start.sh
 SHELL
 
 
