@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/lib/mailinabox/env/bin/python3
 
 # Migrates any file structures, database schemas, etc. between versions of Mail-in-a-Box.
 
