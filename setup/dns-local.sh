@@ -52,8 +52,8 @@ hide_output yum --assumeyes --quiet install bind bind-utils
 sed -i "s/listen-on-v6/\/\/listen-on-v6/" /etc/named.conf
 echo "OPTIONS=\"-4\"" >> /etc/sysconfig/named
 
-# **NOTE:** Sometimes cloud vendors automagically replace/modify 
-# /etc/resolv.conf to include their own DNS servers. DANGER!
+# ___DANGER!!___ Sometimes cloud vendors automagically replace/modify 
+# /etc/resolv.conf to include their own DNS servers.
 echo "nameserver 127.0.0.1" > /etc/resolv.conf
 
 # Configure bind to start after reboots, then start it
