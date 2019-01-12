@@ -38,7 +38,6 @@ Vagrant.configure("2") do |config|
     # Set environment variables so that the setup script does
     # not ask any questions during provisioning. We'll let the
     # machine figure out its own public IP.
-    # gpg --quiet --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
     export NONINTERACTIVE=1
     export PUBLIC_IP=auto
     export PUBLIC_IPV6=auto
