@@ -46,7 +46,8 @@ fi
 
 # Initialize random number generators long before we create 
 # any security keys - this will allow entropy to "build up" before
-# it is actually needed
+# it is actually needed (particularly important on virtual machines
+# with no/minimal hardware entropy)
 if [ ${FIRST_TIME_SETUP:-} ]; then
         source setup/randomize.sh
 fi
@@ -111,11 +112,11 @@ EOF
 # Start service configuration.
 source setup/system.sh
 source setup/dns-local.sh
+source setup/fail2ban.sh  # move to end of installation??
 
 echo Leaving start.sh...
 exit
 
-source setup/fail2ban.sh
 source setup/ssl.sh
 source setup/dns.sh
 source setup/mail-postfix.sh
