@@ -93,7 +93,7 @@ hide_output yum --assumeyes --quiet update
 
 echo Installing support packages...
 hide_output yum --assumeyes --quiet install wget curl git bc unzip \
-	cronie yum-cron ntp fail2ban
+	cronie yum-cron ntp
 
 # ### Set the system timezone
 #
