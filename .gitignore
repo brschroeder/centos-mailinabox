@@ -1,4 +1,5 @@
 *~
+*.swp
 .~lock*
 tests/__pycache__/
 management/__pycache__/
