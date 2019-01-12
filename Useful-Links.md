@@ -26,4 +26,5 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
 * [Installation on CentOS](https://linuxize.com/post/how-to-install-python-3-on-centos-7/)
 * [Example of appplicaton on CentOS and use of virtual environments](https://linuxize.com/post/install-odoo-11-on-centos-7/)
 
-
+**Comparing packages between distros**
+* [pkgs.org](https://pkgs.org/)
