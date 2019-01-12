@@ -3,13 +3,7 @@ CentOS-Mail-in-a-Box
 
 This is an attempt to port the Mail-in-a-Box project from Ubuntu to Centos. The home page of the original Ubuntu project is [here](https://mailinabox.email) and the code on Github is [here](https://github.com/mail-in-a-box/mailinabox).
 
-At this stage, I am not even sure if this is feasible or will be 10,000 hours of work......lets see how it goes. There are many choppy seas ahead in the Ubuntu to Centos journey, including 
-* different packaging of applications (apt vs yum) with likely different versions and features
-* different firewalls (ufw vs firewalld)
-* no Python 3 on CentOS 7
-* different operating system management/configuration methods (sysinit vs systemd)
-* unknown implicit assumptions about the build environment (both on Vagrant but vbox vs libvirt providers....*should* be transparent but.....)
-* etc, etc., etc,
+Current development status/log is [here.](dev-status.md)
 
 The goals of this project are the same as the original project
 
