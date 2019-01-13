@@ -9,7 +9,7 @@ fi
 
 # Check that we are running on CentOS 7
 if [ "$(sed 's/\.[0-9]\.[0-9]\{4\}.*//' /etc/redhat-release)" != "CentOS Linux release 7" ]; then
-	echo "Mail-in-a-Box only supports being installed on CentOS 7, sorry. You are running:"
+	echo "CentOS-Mail-in-a-Box only supports being installed on CentOS 7, sorry. You are running:"
 	echo
 	if [ -e /etc/redhat-release ]; then
         cat /etc/redhat-release
