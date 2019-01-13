@@ -129,6 +129,9 @@ else
 	fi
 fi
 
+# ### Seed /dev/urandom
+# Moved to setup/randomize.sh
+
 # We need an ssh key to store backups via rsync, if it doesn't exist create one
 if [ ! -f /root/.ssh/id_rsa_miab ]; then
 	echo 'Creating SSH key for backup…'
@@ -144,3 +147,6 @@ echo "Configuring automatic security updates..."
 sed -i "s/update_cmd = default/update_cmd = security/" /etc/yum/yum-cron.conf
 sed -i "s/apply_updates = no/apply_updates = yes/" /etc/yum/yum-cron.conf
 systemctl start yum-cron
+
+# ### Local DNS Service
+# Moved to setp/dns-local.sh
