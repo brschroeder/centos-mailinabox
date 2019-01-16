@@ -61,7 +61,7 @@ mkdir -p $STORAGE_ROOT/ssl
 if [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ]; then
 	# Set the umask so the key file is never world-readable.
 	(umask 077; hide_output \
-		openssl genrsa -out $STORAGE_ROOT/ssl/ssl_private_key.pem 2048)
+		openssl genrsa -out $STORAGE_ROOT/ssl/ssl_private_key.pem 2048 2>/dev/null) 
 fi
 
 # Generate a self-signed SSL certificate because things like nginx, dovecot,
