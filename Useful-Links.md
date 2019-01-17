@@ -28,3 +28,6 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
 
 **Comparing packages between distros**
 * [pkgs.org](https://pkgs.org/)
+
+**SELinux**
+* [List of utilities](https://www.thegeekdiary.com/list-of-selinux-utilities/)
