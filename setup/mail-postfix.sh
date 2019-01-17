@@ -173,7 +173,7 @@ tools/editconf.py /etc/postfix/main.cf \
 	smtp_tls_exclude_ciphers=aNULL,RC4 \
 	smtp_tls_security_level=dane \
 	smtp_dns_support_level=dnssec \
-	smtp_tls_CAfile=/etc/ssl/certs/ca-certificates.crt \
+	smtp_tls_CAfile=/etc/ssl/certs/ca-bundle.crt \
 	smtp_tls_loglevel=2
 
 # ### Incoming Mail
@@ -236,6 +236,11 @@ hide_output systemctl --quiet reload firewalld
 semanage port -a -t postgrey_port_t -p tcp 10023
 hide_output systemctl --quiet enable postgrey
 hide_output systemctl --quiet start postgrey
+
+# PERMISSIONS
+
+# fix SELinux ACLs recursively on entire directory
+restorecon -F -r /etc/postfix/
 
 # Postfix v3.2 from IUS has a minor SELinux bug where the postfix/sendmail process
 # cannot read /etc/postfix/dynamicmaps.cf.d directory
