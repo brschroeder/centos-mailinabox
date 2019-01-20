@@ -6,6 +6,8 @@
 * __mail-postfix.sh:__ Remove postfix v2.10 since it does not support DANE TLS, install version 3.2 from IUS repositories. Removing default postfix had side-effect of removing and stopping fail2ban.....another reason to move fail2ban to end of install process
 * __editconf.py:__ Done. Changed hash-bang to python3 virtual environment. Worked perfectly on postfix config files
 * __mail-dovecot.sh:__ Done. Needed two new SELinux rules to allow dovecot to bind to TCP 10026 and read /var/log/maillog
+* __mail-users.sh:__ Done
+* __dkim.sh:__ In progress...
 
 ## Dec 2018
 * __functions.sh:__ Redefined for CentOS, removed Ubuntu specific items

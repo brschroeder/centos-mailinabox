@@ -116,13 +116,13 @@ source setup/fail2ban.sh  # move to end of installation??
 source setup/ssl.sh
 source setup/dns.sh
 source setup/mail-postfix.sh
+source setup/mail-dovecot.sh
+source setup/mail-users.sh
+source setup/dkim.sh
 
 echo Leaving start.sh...
 exit
 
-source setup/mail-dovecot.sh
-source setup/mail-users.sh
-source setup/dkim.sh
 source setup/spamassassin.sh
 source setup/web.sh
 source setup/webmail.sh
