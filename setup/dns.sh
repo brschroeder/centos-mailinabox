@@ -146,7 +146,7 @@ chmod +x /etc/cron.daily/mailinabox-dnssec
 
 # Permit DNS queries on TCP/UDP in the firewall.
 
-systemctl enable firewalld
+hide_output systemctl enable firewalld
 hide_output systemctl --quiet start firewalld
 hide_output firewall-cmd --quiet --permanent --add-service=dns
 hide_output systemctl --quiet reload firewalld
