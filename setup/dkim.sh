@@ -11,38 +11,31 @@ source /etc/mailinabox.conf # load global vars
 
 # Install DKIM...
 echo Installing OpenDKIM/OpenDMARC...
-apt_install opendkim opendkim-tools opendmarc
+hide_output yum --assumeyes --quiet install opendkim opendmarc
 
-# Make sure configuration directories exist.
-mkdir -p /etc/opendkim;
-mkdir -p $STORAGE_ROOT/mail/dkim
+# Create directory to store our certificates
+mkdir -p "$STORAGE_ROOT"/mail/dkim
 
-# Used in InternalHosts and ExternalIgnoreList configuration directives.
-# Not quite sure why.
-echo "127.0.0.1" > /etc/opendkim/TrustedHosts
+# The file /etc/opendkim.conf already exists and is prepopulated with most options
+# commented out. If we find ExternalIgnoreList at start of line, we assume the file has
+# already been configured (default is for this line to start  with "#")
 
-# We need to at least create these files, since we reference them later.
-# Otherwise, opendkim startup will fail
-touch /etc/opendkim/KeyTable
-touch /etc/opendkim/SigningTable
-
-if grep -q "ExternalIgnoreList" /etc/opendkim.conf; then
+if grep -q "^ExternalIgnoreList" /etc/opendkim.conf; then
 	true # already done #NODOC
 else
 	# Add various configuration options to the end of `opendkim.conf`.
-	cat >> /etc/opendkim.conf << EOF;
-MinimumKeyBits          1024
-ExternalIgnoreList      refile:/etc/opendkim/TrustedHosts
-InternalHosts           refile:/etc/opendkim/TrustedHosts
-KeyTable                refile:/etc/opendkim/KeyTable
-SigningTable            refile:/etc/opendkim/SigningTable
-Socket                  inet:8891@127.0.0.1
-RequireSafeKeys         false
-EOF
+	tools/editconf.py /etc/opendkim.conf -s \
+        "MinimumKeyBits=1024" \
+        "ExternalIgnoreList=refile:/etc/opendkim/TrustedHosts" \
+        "InternalHosts=refile:/etc/opendkim/TrustedHosts" \
+        "KeyTable=refile:/etc/opendkim/KeyTable" \
+        "SigningTable=refile:/etc/opendkim/SigningTable" \
+        "Socket=inet:8891@127.0.0.1" \
+        "RequireSafeKeys=false"
 fi
 
 # Create a new DKIM key. This creates mail.private and mail.txt
-# in $STORAGE_ROOT/mail/dkim. The former is the private key and
+# in "$STORAGE_ROOT"/mail/dkim. The former is the private key and
 # the latter is the suggested DNS TXT entry which we'll include
 # in our DNS setup. Note that the files are named after the
 # 'selector' of the key, which we can change later on to support
@@ -52,12 +45,12 @@ fi
 # such as Google. But they and others use a 2048 bit key, so we'll
 # do the same. Keys beyond 2048 bits may exceed DNS record limits.
 if [ ! -f "$STORAGE_ROOT/mail/dkim/mail.private" ]; then
-	opendkim-genkey -b 2048 -r -s mail -D $STORAGE_ROOT/mail/dkim
+	opendkim-genkey -b 2048 -r -s mail -D "$STORAGE_ROOT"/mail/dkim
 fi
 
 # Ensure files are owned by the opendkim user and are private otherwise.
-chown -R opendkim:opendkim $STORAGE_ROOT/mail/dkim
-chmod go-rwx $STORAGE_ROOT/mail/dkim
+chown -R opendkim:opendkim "$STORAGE_ROOT"/mail/dkim
+chmod go-rwx "$STORAGE_ROOT"/mail/dkim
 
 tools/editconf.py /etc/opendmarc.conf -s \
 	"Syslog=true" \
@@ -76,12 +69,13 @@ tools/editconf.py /etc/opendmarc.conf -s \
 # configuring smtpd_milters there to only list the OpenDKIM milter
 # (see mail-postfix.sh).
 tools/editconf.py /etc/postfix/main.cf \
-	"smtpd_milters=inet:127.0.0.1:8891 inet:127.0.0.1:8893"\
+	"smtpd_milters=inet:127.0.0.1:8891 inet:127.0.0.1:8893" \
 	non_smtpd_milters=\$smtpd_milters \
 	milter_default_action=accept
 
-# We need to explicitly enable the opendmarc service, or it will not start
-hide_output systemctl enable opendmarc
+# Enable both opendkim and opendmarc (so they start after a reboot)
+hide_output systemctl --quiet enable opendkim
+hide_output systemctl --quiet enable opendmarc
 
 # Restart services.
 restart_service opendkim
