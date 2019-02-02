@@ -7,7 +7,8 @@
 * __editconf.py:__ Done. Changed hash-bang to python3 virtual environment. Worked perfectly on postfix config files
 * __mail-dovecot.sh:__ Done. Needed two new SELinux rules to allow dovecot to bind to TCP 10026 and read /var/log/maillog
 * __mail-users.sh:__ Done
-* __dkim.sh:__ In progress...
+* __dkim.sh:__ Done
+* __spamassassin.sh:__ In progress...
 
 ## Dec 2018
 * __functions.sh:__ Redefined for CentOS, removed Ubuntu specific items
