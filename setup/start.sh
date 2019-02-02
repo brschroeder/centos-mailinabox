@@ -44,7 +44,7 @@ else
 	echo First time setup...
 fi
 
-# Initialize random number generators long before we create 
+# Initialize random number generators long before we create
 # any security keys - this will allow entropy to "build up" before
 # it is actually needed (particularly important on virtual machines
 # with no/minimal hardware entropy)
@@ -119,11 +119,11 @@ source setup/mail-postfix.sh
 source setup/mail-dovecot.sh
 source setup/mail-users.sh
 source setup/dkim.sh
+source setup/spamassassin.sh
 
 echo Leaving start.sh...
 exit
 
-source setup/spamassassin.sh
 source setup/web.sh
 source setup/webmail.sh
 source setup/nextcloud.sh
