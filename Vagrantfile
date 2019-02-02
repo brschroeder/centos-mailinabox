@@ -1,7 +1,7 @@
 # This VM is setup to use NFS mounts since during development we want to edit
 # files from the host and have changes appear in the VM immediately so we can
 # test. NOTE: NFS version 4 is used - very simple to setup on Fedora.
-# NEED A REFERENCE
+# See the accompanying Vagrantfile-HOWTO.md.
 
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
