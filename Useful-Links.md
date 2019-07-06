@@ -18,7 +18,8 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
 
 **Git / GitHub**
 * [Visual/interactive cheatsheet](http://ndpsoftware.com/git-cheatsheet.html)
-* [GitHub guides](https://guides.github.com) 
+* [GitHub guides](https://guides.github.com)
+* [Keeping a fork in sync with upstream repository](https://help.github.com/en/articles/syncing-a-fork)
 
 **Python 3**
 
