@@ -23,9 +23,15 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
 
 **Python 3**
 
-* [Installation on Redhat](https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/)
-* [Installation on CentOS](https://linuxize.com/post/how-to-install-python-3-on-centos-7/)
-* [Example of appplicaton on CentOS and use of virtual environments](https://linuxize.com/post/install-odoo-11-on-centos-7/)
+* [Installation on Redhat 7.x](https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/)
+* [Installation on CentOS 7.x](https://linuxize.com/post/how-to-install-python-3-on-centos-7/)
+* [Example of appplicaton on CentOS 7.x and use of virtual environments](https://linuxize.com/post/install-odoo-11-on-centos-7/)
+* [Intro to python on RHEL 8](https://developers.redhat.com/blog/2019/05/07/what-no-python-in-red-hat-enterprise-linux-8/)
+* [Using Python on RHEL 8](https://developers.redhat.com/blog/2018/11/14/python-in-rhel-8/)
+
+**RHEL Linux / Centos v8.0**
+* [Intro to application streams](https://developers.redhat.com/blog/2018/11/15/rhel8-introducing-appstreams/)
+* [All RHEL 8 documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/)
 
 **Comparing packages between distros**
 * [pkgs.org](https://pkgs.org/)
