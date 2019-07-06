@@ -1,6 +1,9 @@
 CentOS-Mail-in-a-Box
 ======================
 
+## NOTE: Project is on hold waiting for Centos v8.0 release (expected around Sept 2019)
+
+
 This is an attempt to port the Mail-in-a-Box project from Ubuntu to Centos. The home page of the original Ubuntu project is [here](https://mailinabox.email) and the code on Github is [here](https://github.com/mail-in-a-box/mailinabox).
 
 Current development status/log is [here.](dev-status.md)
@@ -39,5 +42,5 @@ Eventually tags/releases/commits will be crytographicall signed.My PGP key can b
 
     $ gpg --fingerprint 61D6D391
       Key fingerprint = 4FA3 9DA3 636B 5902 175D  4419 3A58 77D3 61D6 D391
-      
+
 
