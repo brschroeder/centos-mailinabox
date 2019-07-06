@@ -1,7 +1,7 @@
 # Development Status
 ## Mid-2019
 * Ran into many problems trying to get recent versions of applications from Ubuntu 18.04 to run on CentOS 7
-* Will switch to CentOS 8 - released expected September 2019 (?)
+* Will switch to CentOS 8 - expected tob be released September 2019 (?)
 
 ## Jan 2019
 * __Fail2ban:__ copied default mailinabox jail and filter definitons into place but do not start f2b now. Need to verify location of log files, owncloud vs nextcloud etc. _Significant change._
