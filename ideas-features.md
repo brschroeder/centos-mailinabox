@@ -1,4 +1,4 @@
-# Ideas/Features Beyond MIAB#
+# Ideas/Features Beyond MIAB #
 
 ## System ##
 * How to know if reboot is required? See yum-utils on RHEL7 or dnf-utils on RHEL8 (probably, this package exists on Fedora 29). This examines running apps but does it capture kernel updates as well? See [here](https://serverfault.com/questions/122178/how-can-i-check-from-the-command-line-if-a-reboot-is-required-on-rhel-or-centos) for an example
