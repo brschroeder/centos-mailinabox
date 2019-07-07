@@ -1,7 +1,7 @@
 CentOS-Mail-in-a-Box
 ======================
 
-## NOTE: Project is on hold waiting for Centos v8.0 release (expected around Sept 2019)
+## NOTE: Project is on hold waiting for CentOS v8.0 release (expected around Sept 2019)
 
 
 This is an attempt to port the Mail-in-a-Box project from Ubuntu to Centos. The home page of the original Ubuntu project is [here](https://mailinabox.email) and the code on Github is [here](https://github.com/mail-in-a-box/mailinabox).
