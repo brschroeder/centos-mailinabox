@@ -3,18 +3,24 @@
 These are rough instructions for configuring Fedora to run vagrant and also serve NFSv4 **only** (no version 2 or 3 of NFS). Once this is done, you will be able to just "vagrant up" from within the procject directory and that will start a virtual machine and start executing the CentOS-Mail-in-a-Box installation scripts. NOTE: NFS is wanted so that we can edit-tes-run-repeat the scripts in the VM environment AND then capture all those edits in the main project directory outside the VM.
 
 ## NFS4 for Vagrant
-* Edit `/etc/sysconfig/nfs` to include (this basically says do not run NFS v2 and v3)
+* NOTE: Fedora 30 changed the NFS config file format and location [see this](https://fedoraproject.org/wiki/Changes/nfs.conf)
+* **Fedora 29 and earlier:** Edit `/etc/sysconfig/nfs` to include (this basically says do not run NFS v2 and v3)
     * `RPCNFSDARGS="-N 2 -N 3 -U"`
     * `RPCMOUNTDOPTS="-N 2 -N 3"`
+* **Fedora 30 and later:** Edit `/etc/nfs.conf` to disable udp, version 2 and version 3 nfs and enable version 4 in the [nfsd] section
+    * udp = 0
+    * vers2 = n
+    * vers3 = n
+    * vers4=y
 * Disable NFS services not required for NFS v4
     * `systemctl mask --now rpc-statd.service rpcbind.service rpcbind.socket`
-* Enable NFS (same as nfs-server)
-    * `systemctl enable nfs`
+* Enable NFS
+    * `systemctl enable nfs-server`
 * Allow NFS thru the firewall
     * `firewall-cmd --permanent --add-service=nfs`
     * `systemctl reload firewalld`
 * Start the NFS server
-    * `systemctl start nfs`
+    * `systemctl start nfs-server`
 
 ## Vagrant
 * Install vagrant with ability to cache package downloads (this will also automatically install vagrant-libvirt from Fedora repositories)
