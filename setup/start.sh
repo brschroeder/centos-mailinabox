@@ -2,12 +2,12 @@
 # This is the entry point for configuring the system.
 #####################################################
 
-source setup/functions.sh # load our functions
+source setup/01_functions.sh # load our functions
 
 # Check system setup: Are we running as root on Ubuntu 18.04 on a
 # machine with enough memory? Is /tmp mounted with exec.
 # If not, this shows an error and exits.
-source setup/preflight.sh
+source setup/02_preflight.sh
 
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
@@ -49,7 +49,7 @@ fi
 # it is actually needed (particularly important on virtual machines
 # with no/minimal hardware entropy)
 if [ ${FIRST_TIME_SETUP:-} ]; then
-        source setup/randomize.sh
+        source setup/03_randomize.sh
 fi
 
 # Create python 3 virtual environment
@@ -124,11 +124,11 @@ source setup/spamassassin.sh
 echo Leaving start.sh...
 exit
 
-source setup/web.sh
-source setup/webmail.sh
-source setup/nextcloud.sh
-source setup/zpush.sh
-source setup/management.sh
+source setup/web.sh                    # apt_install nginx php-cli php-fpm
+source setup/webmail.sh                # Roundcube is installed from source!
+source setup/nextcloud.sh              # also a custom install!
+source setup/zpush.sh                  # php-soap php-imap libawl-php php-xsl + DOWNLOAD
+source setup/management.sh             # duplicity python-pip virtualenv certbot; pip2 install --upgrade boto; pip install --upgrade rtyaml "email_validator>=1.0.0" "exclusiveprocess" flask dnspython python-dateutil "idna>=2.0.0" "cryptography==2.2.2" boto psutil; wget jquery bootstrap
 source setup/munin.sh
 
 # Wait for the management daemon to start...
