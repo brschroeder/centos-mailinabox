@@ -16,6 +16,12 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
 **Markdown**
 * [Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
+**Mail Server Testing**
+* [Various tools](https://mxtoolbox.com)
+* [DNS](http://pingability.com/zoneinfo.jsp)
+* [DKIM and SPF](http://dkimvalidator.com/)
+* [SSL/TLS Security](http://dkimvalidator.com/)
+
 **Git / GitHub**
 * [Visual/interactive cheatsheet](http://ndpsoftware.com/git-cheatsheet.html)
 * [GitHub guides](https://guides.github.com)
@@ -30,8 +36,7 @@ Add this to ~/.vimrc to get ShellCheck running in realtime
 * [Using Python on RHEL 8](https://developers.redhat.com/blog/2018/11/14/python-in-rhel-8/)
 
 **RHEL Linux / Centos v8.0**
-* [Intro to application streams](https://developers.redhat.com/blog/2018/11/15/rhel8-introducing-appstreams/)
-* [All RHEL 8 documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/)
+* [Application Streams](
 
 **Comparing packages between distros**
 * [pkgs.org](https://pkgs.org/)

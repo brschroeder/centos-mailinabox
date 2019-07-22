@@ -2,12 +2,12 @@
 # This is the entry point for configuring the system.
 #####################################################
 
-source setup/01_functions.sh # load our functions
+source setup/functions.sh # load our functions
 
 # Check system setup: Are we running as root on Ubuntu 18.04 on a
 # machine with enough memory? Is /tmp mounted with exec.
 # If not, this shows an error and exits.
-source setup/02_preflight.sh
+source setup/preflight.sh
 
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
@@ -49,7 +49,7 @@ fi
 # it is actually needed (particularly important on virtual machines
 # with no/minimal hardware entropy)
 if [ ${FIRST_TIME_SETUP:-} ]; then
-        source setup/03_randomize.sh
+        source setup/randomize.sh
 fi
 
 # Create python 3 virtual environment
@@ -119,11 +119,11 @@ source setup/mail-postfix.sh
 source setup/mail-dovecot.sh
 source setup/mail-users.sh
 source setup/dkim.sh
-source setup/spamassassin.sh
 
 echo Leaving start.sh...
 exit
 
+source setup/spamassassin.sh
 source setup/web.sh                    # apt_install nginx php-cli php-fpm
 source setup/webmail.sh                # Roundcube is installed from source!
 source setup/nextcloud.sh              # also a custom install!
