@@ -4,6 +4,8 @@
 * How to know if reboot is required? See yum-utils on RHEL7 or dnf-utils on RHEL8 (probably, this package exists on Fedora 29). This examines running apps but does it capture kernel updates as well? See [here](https://serverfault.com/questions/122178/how-can-i-check-from-the-command-line-if-a-reboot-is-required-on-rhel-or-centos) for an example
 * When user restores a backup certain things are missing (secret key used to encrypt backups) and certain things are "duplicated" (details of the Let's Encrypt account, [see this](https://discourse.mailinabox.email/t/multiple-lets-encrypt-accounts-preventing-certificate-from-renewing/4468) which happened when users upgraded from Ubuntu 14.04 to 18.04). Need to ensure that fresh installs, like major OS upgrades or moving to different machines, don't conflict with backups.
 * Choose a name but first check existing trademarks on [TESS](http://tmsearch.uspto.gov/bin/gate.exe?f=searchss&state=4801:d3huad.1.1)
+* New backup option to use Backblaze B2 (which would use rclone under the hood). Ensure things like secret keys are excluded from backup.
+* Checkout [Hugo](https://gohugo.io/) for building a project website. As a clean/simple example see the [rclonewebsite](https://rclone.org/)
 
 ## Spam Filtering ##
 * Spam filtering should be adaptive i.e. should adapt over time after being trained by user. The user should move flag mails somehow, then spam filter should learn from them and adapt it's behavior. Should this be an a per-user basis or server wide (learning from all users is combined into one pool)?
@@ -22,6 +24,7 @@
 * Show mailbox size in control panel, was removed because it was too slow to do in realtime. See [this](https://github.com/mail-in-a-box/mailinabox/commit/c5c413b44725cea033a6b0ffeb3e77c7b447335e). Maybe do this at fixed time each day, save the info into  a temporary file (or database?) and then have the control panel read this file in real time.
 
 ## Cloud Integration (NextCloud) ##
+* Move Nextcloud to a MariaDB database, currently using sqlite3. See [Nextcloud docs](https://docs.nextcloud.com/server/16/admin_manual/configuration_database/index.html)
 * User authentication: currently uses [user_external](https://github.com/nextcloud/user_external/) plugin to authenticate against IMAP. Alternative is to directly authenticate against SQL database, see [user_sql](https://github.com/nextcloud/user_external/) plugin.
 * How to configure quota for user's files? Does this include email messages?
 * Plugins currently used: user_external, calendar, contacts. Add to this an email plugin and then it is a one-stop shop for a complete personal cloud service i.e. file synchronization and email with contacts and calendars!
