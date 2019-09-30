@@ -4,7 +4,8 @@
 # See the accompanying Vagrantfile-HOWTO.md.
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos/7"
+  #config.vm.box = "centos/7"
+  config.vm.box = "roboxes/centos8"
 
   config.vm.provider :libvirt do |libvirt|
     libvirt.memory = 1024
@@ -45,8 +46,8 @@ Vagrant.configure("2") do |config|
     export PRIMARY_HOSTNAME=auto
     export SKIP_NETWORK_CHECKS=1
     # Start the setup script.
-    cd /vagrant
-    setup/start.sh
+    # cd /vagrant
+    # setup/start.sh
 SHELL
 
 
