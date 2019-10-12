@@ -52,12 +52,14 @@ if [ ${FIRST_TIME_SETUP:-} ]; then
         source setup/randomize.sh
 fi
 
-exit 0
 
-# Create python 3 virtual environment
+## Install python 3 and create virtual environment
 if [ ${FIRST_TIME_SETUP:-} ]; then
 	source setup/py3-venv.sh
 fi
+
+echo Leaving start.sh...
+exit
 
 # Put a start script in a global location. We tell the user to run 'mailinabox'
 # in the first dialog prompt, so we should do this before that starts.
@@ -111,6 +113,7 @@ PRIVATE_IP=$PRIVATE_IP
 PRIVATE_IPV6=$PRIVATE_IPV6
 EOF
 
+
 # Start service configuration.
 source setup/system.sh
 source setup/dns-local.sh
@@ -122,8 +125,6 @@ source setup/mail-dovecot.sh
 source setup/mail-users.sh
 source setup/dkim.sh
 
-echo Leaving start.sh...
-exit
 
 source setup/spamassassin.sh
 source setup/web.sh                    # apt_install nginx php-cli php-fpm
