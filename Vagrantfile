@@ -3,13 +3,15 @@
 # test. NOTE: NFS version 4 is used - very simple to setup on Fedora.
 # See the accompanying Vagrantfile-HOWTO.md.
 
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+
 Vagrant.configure("2") do |config|
   #config.vm.box = "centos/7"
-  config.vm.box = "roboxes/centos8"
+  config.vm.box = "generic/centos8"
 
-  config.vm.provider :libvirt do |libvirt|
-    libvirt.memory = 1024
-  end
+#  config.vm.provider :libvirt do |libvirt|
+#    libvirt.memory = 1024
+#  end
 
   # use Vagrant's insecure private key, allows new boxes to be shared w/o having
   # to share your own private key(s). Vagrants keys are pre-installed but you also get
@@ -17,23 +19,23 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   config.vm.hostname ="cmiab.lan"
-  #config.vm.network "private_network", ip: "192.168.122.10"
+  config.vm.network "private_network", ip: "10.0.2.15"
 
-  config.vm.synced_folder ".", "/vagrant",
-    type: "nfs",
-    nfs_version: 4,
-    nfs_udp: false,
-    linux__nfs_options: ['rw','no_subtree_check','no_root_squash']
+  config.vm.synced_folder ".", "/vagrant"
+#    type: "nfs",
+#    nfs_version: 4,
+#    nfs_udp: false,
+#    linux__nfs_options: ['rw','no_subtree_check','no_root_squash']
 
   if Vagrant.has_plugin?("vagrant-cachier")
     # Configure cached packages to be shared between instances of the same base box.
     # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
     config.cache.scope = :box
-    config.cache.synced_folder_opts = {
-      type: :nfs,
-      nfs_version: 4,
-      nfs_udp: false
-    }
+#    config.cache.synced_folder_opts = {
+#      type: :nfs,
+#      nfs_version: 4,
+#      nfs_udp: false
+#    }
   end
 
   config.vm.provision :shell, :inline => <<-SHELL
@@ -46,8 +48,8 @@ Vagrant.configure("2") do |config|
     export PRIMARY_HOSTNAME=auto
     export SKIP_NETWORK_CHECKS=1
     # Start the setup script.
-    # cd /vagrant
-    # setup/start.sh
+    cd /vagrant
+    setup/start.sh
 SHELL
 
 

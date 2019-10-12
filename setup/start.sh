@@ -52,6 +52,8 @@ if [ ${FIRST_TIME_SETUP:-} ]; then
         source setup/randomize.sh
 fi
 
+exit 0
+
 # Create python 3 virtual environment
 if [ ${FIRST_TIME_SETUP:-} ]; then
 	source setup/py3-venv.sh
