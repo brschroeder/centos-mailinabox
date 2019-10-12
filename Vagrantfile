@@ -1,3 +1,10 @@
+# 2019-10-11 Official CentOS vagrant image has not been released yet
+# Long term plan is to use official image with libvirt, NFS and cache plugin
+# Short term plan will use generic/centos8. Have had problems with this vagrant 
+# getting IP addresses on libvirt so will use VirtualBox for now.
+# Thus there are two major sections in this file, (un)comment one
+
+
 # This VM is setup to use NFS mounts since during development we want to edit
 # files from the host and have changes appear in the VM immediately so we can
 # test. NOTE: NFS version 4 is used - very simple to setup on Fedora.
