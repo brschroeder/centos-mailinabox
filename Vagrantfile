@@ -12,7 +12,14 @@ Vagrant.configure("2") do |config|
 
 
 # VIRTUAL BOX
-#
+# Does not work with cachier plugin
+
+  config.ssh.insert_key = false
+
+  config.vm.hostname ="cmiab.lan"
+  config.vm.network "private_network", ip: "10.0.2.15"
+
+  config.vm.synced_folder ".", "/vagrant"
 
 
 
@@ -50,6 +57,8 @@ Vagrant.configure("2") do |config|
       nfs_udp: false
     }
   end
+
+# PROVISIONING
 
   config.vm.provision :shell, :inline => <<-SHELL
     # Set environment variables so that the setup script does
