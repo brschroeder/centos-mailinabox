@@ -13,10 +13,18 @@ source /etc/mailinabox.conf # load global vars
 # Install the packages.
 #
 # * nsd: The non-recursive nameserver that publishes our DNS records.
-# * ldnsutils: Helper utilities for signing DNSSEC zones.
 # * openssh-client: Provides ssh-keyscan which we use to create SSHFP records.
 echo "Installing nsd (DNS server)..."
-hide_output yum --assumeyes --quiet install nsd ldns
+
+# *********************** REMOVE AFTER NSD IN EPEL 2019-10-26
+sed -i '/^#.* /s/^#\ //' /etc/yum.repos.d/epel-testing.repo
+dnf config-manager --set-enabled epel-testing
+
+hide_output yum --assumeyes --quiet install nsd
+
+
+# *********************** REMOVE AFTER NSD IN EPEL 2019-10-26
+dnf config-manager --disable epel-testing
 
 # Prepare nsd's configuration.
 
@@ -89,34 +97,49 @@ mkdir -p "$STORAGE_ROOT/dns/dnssec";
 #  * .fund
 
 FIRST=1 #NODOC
-for algo in RSASHA1-NSEC3-SHA1 RSASHA256; do
+for algo in NSEC3RSASHA1 RSASHA256; do
 if [ ! -f "$STORAGE_ROOT/dns/dnssec/$algo.conf" ]; then
 	if [ $FIRST == 1 ]; then
 		echo "Generating DNSSEC signing keys..."
 		FIRST=0 #NODOC
 	fi
 
-	# Create the Key-Signing Key (KSK) (with `-k`) which is the so-called
+	# Create the Key-Signing Key (KSK) (with `-f KSK`) which is the so-called
 	# Secure Entry Point. The domain name we provide ("_domain_") doesn't
 	#  matter -- we'll use the same keys for all our domains.
 	#
-	# `ldns-keygen` outputs the new key's filename to stdout, which
+	# `dnssec-keygen` outputs the new key's filename to stdout, which
 	# we're capturing into the `KSK` variable.
 	#
-	# ldns-keygen uses /dev/random for generating random numbers by default.
+	# dnssec-keygen uses /dev/random for generating random numbers by default.
 	# This is slow and unecessary if we ensure /dev/urandom is seeded properly,
-	# so we use /dev/urandom. See system.sh for an explanation. See #596, #115.
-	KSK=$(umask 077; cd $STORAGE_ROOT/dns/dnssec; ldns-keygen -r /dev/urandom -a $algo -b 2048 -k _domain_);
+	# so we use /dev/urandom. See randomize.sh for an explanation. See #596, #115.
 
-	# Now create a Zone-Signing Key (ZSK) which is expected to be
+    if [ $algo == NSEC3RSASHA1 ]; then
+        DIGEST_ALGO=-1
+    elif [ $algo == RSASHA256 ]; then
+        DIGEST_ALGO=-2
+    else
+        echo "Unknown digest algorithm...."
+        exit 1
+    fi
+
+    KSK=$(umask 077; cd $STORAGE_ROOT/dns/dnssec; dnssec-keygen -q -r /dev/urandom -a $algo -b 2048 -f KSK _domain_);
+    umask 077; dnssec-dsfromkey $DIGEST_ALGO $STORAGE_ROOT/dns/dnssec/$KSK > $STORAGE_ROOT/dns/dnssec/$KSK.ds
+
+    # Now create a Zone-Signing Key (ZSK) which is expected to be
 	# rotated more often than a KSK, although we have no plans to
 	# rotate it (and doing so would be difficult to do without
-	# disturbing DNS availability.) Omit `-k` and use a shorter key length.
-	ZSK=$(umask 077; cd $STORAGE_ROOT/dns/dnssec; ldns-keygen -r /dev/urandom -a $algo -b 1024 _domain_);
+	# disturbing DNS availability.) Drop `-f KSK` and use a shorter key length.
 
-	# These generate two sets of files like:
+    ZSK=$(umask 077; cd $STORAGE_ROOT/dns/dnssec; dnssec-keygen -q -r /dev/urandom -a $algo -b 1024 _domain_);
+    umask 077; dnssec-dsfromkey $DIGEST_ALGO $STORAGE_ROOT/dns/dnssec/$ZSK > $STORAGE_ROOT/dns/dnssec/$ZSK.ds
+
+
+    # These generate two sets of files like:
 	#
-	# * `K_domain_.+007+08882.ds`: DS record normally provided to domain name registrar (but it's actually invalid with `_domain_`)
+	# * `K_domain_.+007+08882.ds`: DS record normally provided to domain name registrar
+    #       (but it's actually invalid with `_domain_`)
 	# * `K_domain_.+007+08882.key`: public key
 	# * `K_domain_.+007+08882.private`: private key (secret!)
 
@@ -145,9 +168,5 @@ EOF
 chmod +x /etc/cron.daily/mailinabox-dnssec
 
 # Permit DNS queries on TCP/UDP in the firewall.
-
-hide_output systemctl enable firewalld
-hide_output systemctl --quiet start firewalld
 hide_output firewall-cmd --quiet --permanent --add-service=dns
 hide_output systemctl --quiet reload firewalld
-

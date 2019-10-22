@@ -94,7 +94,7 @@ function get_default_privateip {
 	if [ "$1" == "6" ]; then target=2001:4860:4860::8888; fi
 
 	# Get the route information.
-	route=$(ip -$1 -o route get $target | grep -v unreachable)
+	route=$(ip -$1 -o route get $target 2>/dev/null | grep -v unreachable)
 
 	# Parse the address out of the route information.
 	address=$(echo $route | sed "s/.* src \([^ ]*\).*/\1/")
@@ -108,15 +108,6 @@ function get_default_privateip {
 
 	echo $address
 }
-
-# Not needed in CentOS: firewalld is not "chatty" i.e. no output
-# when adding a new service or port to firewall
-#function ufw_allow {
-#	if [ -z "$DISABLE_FIREWALL" ]; then
-#		# ufw has completely unhelpful output
-#		ufw allow $1 > /dev/null;
-#	fi
-#}
 
 
 function restart_service {

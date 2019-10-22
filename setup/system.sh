@@ -70,30 +70,37 @@ fi
 
 # ### Update Packages
 
-# Update system packages to make sure we have the latest upstream versions
-# from CentOS
+# Update system packages to make sure we have the latest versions
 
 echo Updating system packages...
-hide_output yum --assumeyes --quiet update
+# hide_output yum --assumeyes --quiet update <-- TEMPORARILY DISABLED TO TEST AUTOMATIC UPDATES
 
 # ### Install System Packages
 
-# Install basic utilities.
+# Install basic utilities
 #
-# * haveged: Provides extra entropy to /dev/random so it doesn't stall
-#	         when generating random numbers for private keys (e.g. during
-#	         ldns-keygen).
-# * unattended-upgrades: Apt tool to install security updates automatically.
-#         yum-cron offers similar functionality
-# * cron: Runs background processes periodically.
-# * ntp: keeps the system time correct
-# * fail2ban: scans log files for repeated failed login attempts and blocks the remote IP at the firewall
-# * git: we install some things directly from github
-# * bc: allows us to do math to compute sane defaults
+# git: we install some things directly from github
+# curl: we need to download some files
+# bc: allows us to do math to compute sane defaults
+# cronie: cron daemon to run background process periodically
+# chrony: network time protocol client
+# dnf-automatic: automatic updates, both download and install
 
 echo Installing support packages...
-hide_output yum --assumeyes --quiet install wget curl git bc unzip \
-	cronie yum-cron ntp
+# Install applications
+hide_output yum --assumeyes --quiet install wget curl git bc unzip
+# Install services/daemons that run continuously
+hide_output yum --assumeyes --quiet install cronie chrony dnf-automatic
+restart_service crond
+restart_service chronyd
+# enable automatic downloads and installation of updates
+sed -i 's/apply_updates = no/apply_updates = yes/' /etc/dnf/automatic.conf
+hide_output systemctl enable --now dnf-automatic.timer
+
+# ************ REMOVE UPON RELEASE ************************************************
+# Install some tools needed to process SELinux alerts
+hide_output yum --assumeyes --quiet install setools setools-console setroubleshoot
+# *********************************************************************************
 
 # ### Set the system timezone
 #
@@ -104,9 +111,8 @@ hide_output yum --assumeyes --quiet install wget curl git bc unzip \
 # things (i.e. late at night in whatever timezone the user actually lives
 # in).
 #
-# However, changing the timezone once it is set seems to confuse fail2ban
-# and requires restarting fail2ban (done below in the fail2ban
-# section) and syslog (see #328). There might be other issues, and it's
+# However, changing the timezone once it is set seems to confuse
+# syslog (see #328). There might be other issues, and it's
 # not likely the user will want to change this, so we only ask on first
 # setup.
 
@@ -129,8 +135,6 @@ else
 	fi
 fi
 
-# ### Seed /dev/urandom
-# Moved to setup/randomize.sh
 
 # We need an ssh key to store backups via rsync, if it doesn't exist create one
 if [ ! -f /root/.ssh/id_rsa_miab ]; then
@@ -138,15 +142,12 @@ if [ ! -f /root/.ssh/id_rsa_miab ]; then
 	ssh-keygen -t rsa -b 2048 -a 100 -f /root/.ssh/id_rsa_miab -N '' -q
 fi
 
+# ### Firewall
 
-# ### Package maintenance
-#
-# Allow yum to automatically install all security updates
-# Sysadmin is responsible for installing non-security updates
-echo "Configuring automatic security updates..."
-sed -i "s/update_cmd = default/update_cmd = security/" /etc/yum/yum-cron.conf
-sed -i "s/apply_updates = no/apply_updates = yes/" /etc/yum/yum-cron.conf
-systemctl start yum-cron
+# Explicity turn on and enable firewall
+# Use `firewall-cmd --list-all` to see list of open ports/services
+# By default the port for cockpit (TCP 9090) is open, close it
+hide_output systemctl enable --quiet --now firewalld
+hide_output firewall-cmd --quiet --permanent --remove-service=cockpit
+hide_output systemctl --quiet reload firewalld
 
-# ### Local DNS Service
-# Moved to setp/dns-local.sh

@@ -4,7 +4,7 @@
 
 source setup/functions.sh # load our functions
 
-# Check system setup: Are we running as root on CentOS 7 on a
+# Check system setup: Are we running as root on CentOS 8 on a
 # machine with enough memory? Is /tmp mounted with exec.
 # If not, this shows an error and exits.
 source setup/preflight.sh
@@ -44,26 +44,24 @@ else
 	echo First time setup...
 fi
 
-# Initialize random number generators long before we create
-# any security keys - this will allow entropy to "build up" before
-# it is actually needed (particularly important on virtual machines
-# with no/minimal hardware entropy)
 if [ ${FIRST_TIME_SETUP:-} ]; then
-        source setup/randomize.sh
-fi
+    # Setup software repositories
+    dnf config-manager --set-enabled PowerTools
+    hide_output yum --assumeyes --quiet install epel-release
 
+    # Initialize random number generators long before we create
+    # any security keys - this will allow entropy to "build up" before
+    # it is actually needed (particularly important on virtual machines
+    # with no/minimal hardware entropy)
+    source setup/randomize.sh
 
-## Install python 3 and create virtual environment
-if [ ${FIRST_TIME_SETUP:-} ]; then
+    # Install python 3 and create virtual environment
 	source setup/py3-venv.sh
 fi
 
-echo Leaving start.sh...
-exit
-
 # Put a start script in a global location. We tell the user to run 'mailinabox'
 # in the first dialog prompt, so we should do this before that starts.
-cat > /usr/local/bin/mailinabox << EOF;
+cat > /usr/local/bin/mailinabox << EOF ;
 #!/bin/bash
 cd `pwd`
 source setup/start.sh
@@ -103,7 +101,7 @@ fi
 
 # Save the global options in /etc/mailinabox.conf so that standalone
 # tools know where to look for data.
-cat > /etc/mailinabox.conf << EOF;
+cat > /etc/mailinabox.conf << EOF ;
 STORAGE_USER=$STORAGE_USER
 STORAGE_ROOT=$STORAGE_ROOT
 PRIMARY_HOSTNAME=$PRIMARY_HOSTNAME
@@ -113,17 +111,20 @@ PRIVATE_IP=$PRIVATE_IP
 PRIVATE_IPV6=$PRIVATE_IPV6
 EOF
 
-
 # Start service configuration.
 source setup/system.sh
-source setup/dns-local.sh
-source setup/fail2ban.sh  # move to end of installation??
 source setup/ssl.sh
+source setup/dns-local.sh
 source setup/dns.sh
 source setup/mail-postfix.sh
+
+echo Leaving start.sh...
+exit
+
 source setup/mail-dovecot.sh
 source setup/mail-users.sh
 source setup/dkim.sh
+source setup/fail2ban.sh  # move to end of installation??
 
 
 source setup/spamassassin.sh

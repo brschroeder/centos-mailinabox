@@ -1,12 +1,13 @@
 #!/bin/bash
 
+# Create Python 3 virtual environment
+# For guidelines on using Python in RHEL see the official docs here
+#       https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/installing_managing_and_removing_user_space_components/index
+# For background info on new BaseOS vs AppStream concepts, see this Redhat dev blog
+#       https://developers.redhat.com/blog/2018/11/14/python-in-rhel-8/
 # Install Python 3.6 module (no user-space python is installed by default on CentOS 8)
-# Create python3 virtual environment and install email_validator
-# See Redhat docs https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/installing_managing_and_removing_user_space_components/index 
-# for background info on new BaseOS vs AppStream concepts.
-# See Redhat dev blog https://developers.redhat.com/blog/2018/11/14/python-in-rhel-8/
-# for guidelines on using Python in RHEL.
 # Python 3 is installed in /usr/bin/, note that this is different from "system-python".
+# Our virtual environment is installed in /usr/local/lib/mailinabox/env
 
 echo Creating Python 3 virtual environment...
 hide_output yum --assumeyes --quiet install @python36

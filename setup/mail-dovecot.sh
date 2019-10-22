@@ -19,10 +19,6 @@ source setup/functions.sh # load our functions
 source /etc/mailinabox.conf # load global vars
 
 
-# Install packages for dovecot. These are all core dovecot plugins,
-# but dovecot-lucene is packaged by *us* in the Mail-in-a-Box PPA,
-# not by Ubuntu.
-
 echo "Installing Dovecot (IMAP server)..."
 hide_output yum --quiet --assumeyes install dovecot dovecot-pigeonhole
 
@@ -212,7 +208,7 @@ hide_output firewall-cmd --permanent --add-service=managesieve
 hide_output systemctl --quiet reload firewalld
 
 
-# Enable and restart services but first need to create a SELinux rule to allow 
+# Enable and restart services but first need to create a SELinux rule to allow
 # dovecot to bind to tcp port 10026
 hide_output systemctl --quiet enable dovecot
 cat > /tmp/dovecot-tcp-10026.te << EOF;

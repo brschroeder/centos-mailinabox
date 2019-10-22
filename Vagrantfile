@@ -1,6 +1,6 @@
 # 2019-10-11 Official CentOS vagrant image has not been released yet
 # Long term plan is to use official image with libvirt, NFS and cache plugin
-# Short term plan will use generic/centos8. Have had problems with this vagrant 
+# Short term plan will use generic/centos8. Have had problems with this vagrant
 # getting IP addresses on libvirt so will use VirtualBox for now.
 # Thus there are two major sections in this file, (un)comment one
 

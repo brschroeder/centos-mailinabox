@@ -11,8 +11,8 @@ source setup/functions.sh # load our functions
 # answers remote queries about domain names hosted on this box. For that
 # see dns.sh.)
 #
-# By default CentOS does not run any name resolution service locally. All 
-# requests are relayed to any upstream servers listed in /etc/resolv.conf. 
+# By default CentOS does not run any name resolution service locally. All
+# requests are relayed to any upstream servers listed in /etc/resolv.conf.
 # This means that DNSSEC may not be used in all DNS queries.
 #
 # This won't work for us for three reasons.
@@ -30,7 +30,7 @@ source setup/functions.sh # load our functions
 #
 # So we really need a local recursive nameserver.
 #
-# We'll install bind aka named, which has DNSSEC enabled by default via 
+# We'll install bind aka named, which has DNSSEC enabled by default via
 # "dnssec-enable yes"and "dnssec-validation yes" in /etc/named.conf
 # We'll have it be bound to 127.0.0.1 so that it does not interfere with
 # the public, recursive nameserver `nsd` bound to the public ethernet interfaces.
@@ -52,11 +52,10 @@ hide_output yum --assumeyes --quiet install bind bind-utils
 sed -i "s/listen-on-v6/\/\/listen-on-v6/" /etc/named.conf
 echo "OPTIONS=\"-4\"" >> /etc/sysconfig/named
 
-# ___DANGER!!___ Sometimes cloud vendors automagically replace/modify 
+# ___DANGER!!___ Sometimes cloud vendors automagically replace/modify
 # /etc/resolv.conf to include their own DNS servers.
 echo "nameserver 127.0.0.1" > /etc/resolv.conf
 
-# Configure bind to start after reboots, then start it
-hide_output systemctl enable named
-hide_output systemctl start named
+# Configure bind to start after reboots and start it now
+hide_output systemctl enable --now named
 
