@@ -56,6 +56,8 @@ echo "Installing Postfix (SMTP server)..."
 # 5. Install all dependencies needed to build with `yum builddep --nobest postfix-X.Y.Z-N.el8.src.rpm`
 # 6. Build everything with `rpmbuild -ra postfix-X.Y.Z-N.el8.src.rpm`
 
+hide_output dig kinibay.org
+
 wget_verify https://kinibay.org/postfix-rpms/postfix-3.3.1-8.el8.brs.x86_64.rpm \
     e0c30d0d0ef0514e74238ab619b0ba058ea18d8a /tmp/postfix.rpm
 hide_output yum --assumeyes --quiet install /tmp/postfix.rpm
