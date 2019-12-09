@@ -1,7 +1,10 @@
 CentOS-Mail-in-a-Box
 ======================
 
-## NOTE: Project is on hold waiting for CentOS v8.0 release (expected around Sept 2019)
+## NOTE: Project is on hold waiting for CentOS v8 to reach some form of maturity.
+Specifically, there are many packages that not yet available on CentOS 8 (as of December 2019). The main examples are supporting packages for Postfix (postfix-pcre, postfix-sqlite) and Dovecot (dovecot-pigeonhole). In principle, these packages can be compiled from source and I have done this for Postfix and Postgrey (see [this page](https://kinibay.org/). However, compilation for Dovecot is currently a nightmare because other packages need to be compiled in order to compile dovecot and some of these are just broken! This is starting to go down the rabbit hole...
+
+## Project moved onto Fedora
 
 
 This is an attempt to port the Mail-in-a-Box project from Ubuntu to Centos. The home page of the original Ubuntu project is [here](https://mailinabox.email) and the code on Github is [here](https://github.com/mail-in-a-box/mailinabox).
