@@ -7,11 +7,16 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "generic/centos8"
+  # config.vm.box = "generic/centos8"
+  config.vm.box = "centos/8"
 
 #################################################################################
 # VIRTUAL BOX
 # Does not work with cachier plugin
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+  end
 
   config.ssh.insert_key = false
 

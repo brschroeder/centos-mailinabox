@@ -1,4 +1,5 @@
 **Editor**
+See other docs
 
 Add this to ~/.vimrc to get ShellCheck running in realtime
 
