@@ -51,11 +51,10 @@ source setup/functions.sh # load our functions
 # EPEL (Extra Packages for Enterprise Linux) repository
 
 echo "Initializing random number generator..."
-hide_output yum --assumeyes --quiet install epel-release
 # hardware-based
 hide_output yum --assumeyes --quiet install rng-tools
 hide_output systemctl start rngd || exit 1
-# software-based: haveged will ensure at leaset 1024 bits of entropy in 
+# software-based: haveged will ensure at leaset 1024 bits of entropy in
 # /proc/sys/kernel/random/entropy_avail
 hide_output yum --assumeyes --quiet install haveged
 hide_output systemctl enable haveged || exit 1

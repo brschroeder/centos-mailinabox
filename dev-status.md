@@ -1,4 +1,9 @@
 # Development Status
+## Oct 2019
+* Started work on CentOS 8 but many packages are not yet fully available in either CentOS or EPEL repositories e.g. postfix is available but not postfix-pcre or postfix-sqlite.
+* Built own versions of all postfix packages (all originate from same single source rpm)
+* Need dovecot-pigeonhole (sieve filtering), own build failed because quota plugin cannot find rpc.h (used to be included in quota-rpc package but now is in libtirpc......dovecot source files need to be updated to include these libs). Will wait for official CentOS builds - not worthwhile chasing this down.
+
 ## Mid-2019
 * Ran into many problems trying to get recent versions of applications from Ubuntu 18.04 to run on CentOS 7
 * Will switch to CentOS 8 - expected tob be released September 2019 (?)

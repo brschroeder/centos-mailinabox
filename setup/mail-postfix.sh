@@ -41,19 +41,48 @@ source /etc/mailinabox.conf # load global vars
 #   always will.
 # * `ca-certificates`: A trust store used to squelch postfix warnings about
 #   untrusted opportunistically-encrypted connections.
-#   
-#   The version of postfix in CentOS 7 is v2.10 BUT this does not support DANE TLS
-#   We will replace the default version with a more updated version from IUS repositories
-
+#
 
 echo "Installing Postfix (SMTP server)..."
+# Neither CentOS nor EPEL repositories offer the pcre or sqlite plugins for postfix
+# We have built these from source as follows and made them publicly available
+# 1. Clean CentOS 8 install, add dev and rpm dev tool groups
+#       a. yum group install "Development Tools"
+#       b. yum group install "RPM Development Tools"
+# 2. Enable PowerTools repository
+#       a. sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/CentOS-PowerTools.repo
+# 3. Create rpmbuild tree as non-root user with `rpmdev-setuptree`
+# 4. Download source RPM with `yum download --source postfix`
+# 5. Install all dependencies needed to build with `yum builddep --nobest postfix-X.Y.Z-N.el8.src.rpm`
+# 6. Build everything with `rpmbuild -ra postfix-X.Y.Z-N.el8.src.rpm`
 
-hide_output yum --quiet --assumeyes install https://centos7.iuscommunity.org/ius-release.rpm
+hide_output dig kinibay.org
 
-hide_output systemctl --quiet stop postfix
-hide_output yum --quiet --assumeyes remove postfix
-hide_output yum --quiet --assumeyes install postfix32u postfix32u-pcre postfix32u-sqlite postgrey ca-certificates
+wget_verify https://kinibay.org/postfix-rpms/postfix-3.3.1-8.el8.brs.x86_64.rpm \
+    e0c30d0d0ef0514e74238ab619b0ba058ea18d8a /tmp/postfix.rpm
+hide_output yum --assumeyes --quiet install /tmp/postfix.rpm
+rm /tmp/postfix.rpm
 
+wget_verify https://kinibay.org/postfix-rpms/postfix-pcre-3.3.1-8.el8.brs.x86_64.rpm \
+    a6c943835b49c9e2d16429d43ebef6013d332c3b /tmp/postfix-pcre.rpm
+hide_output yum --assumeyes --quiet install /tmp/postfix-pcre.rpm
+rm /tmp/postfix-pcre.rpm
+
+wget_verify https://kinibay.org/postfix-rpms/postfix-sqlite-3.3.1-8.el8.brs.x86_64.rpm \
+    e0d7fa789b11f10f02ece7d5e102d457af07a12c /tmp/postfix-sqlite.rpm
+hide_output yum --assumeyes --quiet install /tmp/postfix-sqlite.rpm
+rm /tmp/postfix-sqlite.rpm
+
+# Similary for postgrey, had to build our own package
+wget_verify https://kinibay.org/postgrey-rpms/postgrey-1.37-1.el8.brs.noarch.rpm \
+    de61cc869820bd8bd1ba3707331b9b503a9ff93b /tmp/postgrey.rpm
+hide_output yum --assumeyes --quiet install /tmp/postgrey.rpm
+rm /tmp/postgrey.rpm
+
+# Install certificate authority certs
+hide_output yum --assumeyes --quiet install ca-certificates
+
+exit
 
 # ### Basic Settings
 
@@ -69,7 +98,7 @@ tools/editconf.py /etc/postfix/main.cf \
 	smtp_bind_address=$PRIVATE_IP \
 	smtp_bind_address6=$PRIVATE_IPV6 \
 	myhostname=$PRIMARY_HOSTNAME\
-	smtpd_banner="\$myhostname ESMTP Hi, I'm a Mail-in-a-Box (Ubuntu/Postfix; see https://mailinabox.email/)" \
+	smtpd_banner="\$myhostname ESMTP Hi, I'm a CentOS-Mail-in-a-Box" \
 	mydestination=localhost
 
 # Tweak some queue settings:
@@ -113,7 +142,7 @@ tools/editconf.py /etc/postfix/master.cf -s -w \
 # Install the `outgoing_mail_header_filters` file required by the new 'authclean' service.
 cp conf/postfix_outgoing_mail_header_filters /etc/postfix/outgoing_mail_header_filters
 
-# Modify the `outgoing_mail_header_filters` file to use the local machine name and ip 
+# Modify the `outgoing_mail_header_filters` file to use the local machine name and ip
 # on the first received header line.  This may help reduce the spam score of email by
 # removing the 127.0.0.1 reference.
 sed -i "s/PRIMARY_HOSTNAME/$PRIMARY_HOSTNAME/" /etc/postfix/outgoing_mail_header_filters
@@ -231,40 +260,45 @@ hide_output systemctl --quiet reload firewalld
 
 # Restart services
 
-# postgrey is disabled by default, so enable and then start it, but first we need to 
-# create a new SELinux rule to allow /usr/bin/perl permission to bind to tcp socket 10023 
+# postgrey is disabled by default, so enable and then start it, but first we need to
+# create a new SELinux rule to allow /usr/bin/perl permission to bind to tcp socket 10023
 semanage port -a -t postgrey_port_t -p tcp 10023
 hide_output systemctl --quiet enable postgrey
 hide_output systemctl --quiet start postgrey
 
 # PERMISSIONS
 
-# fix SELinux ACLs recursively on entire directory
+# fix SELinux ACLs recursively on entire directory, strictly only need to
+# fix permissions on outgoinng_mail_headers file copied from user space
 restorecon -F -r /etc/postfix/
+
+#****************** REMOVE ???? ****************************************************
 
 # Postfix v3.2 from IUS has a minor SELinux bug where the postfix/sendmail process
 # cannot read /etc/postfix/dynamicmaps.cf.d directory
-# To workaround this bug, create a new SELinux rule granting postfix/sendmail 
+# To workaround this bug, create a new SELinux rule granting postfix/sendmail
 # permission to read this directory.
-cat > /tmp/my-newaliases.te << EOF;
+#cat > /tmp/my-newaliases.te << EOF;
+#
+#module my-newaliases 1.0;
+#
+#require {
+#	type sendmail_t;
+#	type postfix_etc_t;
+#	class dir read;
+#}
+#
+##============= sendmail_t ==============
+#allow sendmail_t postfix_etc_t:dir read;
+#EOF
+#
+#hide_output checkmodule -M -m -o /tmp/my-newaliases.mod /tmp/my-newaliases.te
+#hide_output semodule_package -o /tmp/my-newaliases.pp -m /tmp/my-newaliases.mod
+#hide_output semodule -i /tmp/my-newaliases.pp
+#rm -f /tmp/my-newaliases.*
+# **********************************************************************************
 
-module my-newaliases 1.0;
 
-require {
-	type sendmail_t;
-	type postfix_etc_t;
-	class dir read;
-}
-
-#============= sendmail_t ==============
-allow sendmail_t postfix_etc_t:dir read;
-EOF
-
-hide_output checkmodule -M -m -o /tmp/my-newaliases.mod /tmp/my-newaliases.te
-hide_output semodule_package -o /tmp/my-newaliases.pp -m /tmp/my-newaliases.mod
-hide_output semodule -i /tmp/my-newaliases.pp
-rm -f /tmp/my-newaliases.*
-
-hide_output systemctl --quiet enable postfix
-hide_output systemctl --quiet start postfix
-
+#   ***** START POSTGREY HERE AS WELL ???? **************
+# start postfix and enable to auto-start after reboots
+hide_output systemctl --quiet --now enable postfix

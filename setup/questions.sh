@@ -3,7 +3,7 @@ if [ -z "${NONINTERACTIVE:-}" ]; then
 	# this was being able to ask the user for input even if stdin has been redirected,
 	# e.g. if we piped a bootstrapping install script to bash to get started. In that
 	# case, the nifty '[ -t 0 ]' test won't work. But with Vagrant we must suppress so we
-	# use a shell flag instead.
+	# use a shell flag instead. Really suppress any output from installing dialog.
 	#
 	# Also install email_validator into Python 3 virtual environment
 	if [ ! -f /usr/bin/dialog ]; then
@@ -15,7 +15,7 @@ if [ -z "${NONINTERACTIVE:-}" ]; then
 		"Hello and thanks for deploying a CentOS-Mail-in-a-Box!
 		\n\nI'm going to ask you a few questions.
 		\n\nTo change your answers later, just run 'sudo mailinabox' from the command line.
-		\n\nNOTE: You should only install this on a brand new CentOS installation 100% dedicated to CentOS-Mail-in-a-Box. CentOS-Mail-in-a-Box will, for example, remove apache2."
+		\n\nNOTE: You should only install this on a brand new CentOS 8 installation 100% dedicated to CentOS-Mail-in-a-Box. CentOS-Mail-in-a-Box will, for example, remove apache2."
 fi
 
 # The box needs a name.
@@ -45,7 +45,7 @@ you really want.
 			# user hit ESC/cancel
 			exit
 		fi
-		while ! /opt/rh/rh-python36/root/bin/python3 management/mailconfig.py validate-email "$EMAIL_ADDR"
+		while ! /usr/local/lib/mailinabox/bin/python3 management/mailconfig.py validate-email "$EMAIL_ADDR"
 		do
 			input_box "Your Email Address" \
 				"That's not a valid email address.\n\nWhat email address are you setting this box up to manage?" \
@@ -201,6 +201,6 @@ if [ "$PRIVATE_IPV6" != "$PUBLIC_IPV6" ]; then
 	echo "Private IPv6 Address: $PRIVATE_IPV6"
 fi
 if [ -f /usr/bin/git ] && [ -d .git ]; then
-	echo "Mail-in-a-Box Version: " $(git describe)
+	echo "CentOS-Mail-in-a-Box Version: " $(git describe)
 fi
 echo
